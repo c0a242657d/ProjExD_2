@@ -7,6 +7,22 @@ import pygame as pg
 WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def gameover(screen: pg.Surface) -> None:
+    font1 = pg.font.Font(None, 150)
+    font2 = pg.font.Font(None, 100)
+    text1 = font1.render("GAME OVER", True, (255, 0, 0))
+    text2 = font2.render("Press any key to continue", True, (0, 0, 255))
+    screen.blit(text1, [WIDTH//2 - text1.get_width()//2, HEIGHT//2 - text1.get_height()])
+    screen.blit(text2, [WIDTH//2 - text2.get_width()//2, HEIGHT//2 + 50])
+    pg.display.update()
+    while True:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == pg.KEYDOWN:
+                return
+
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:  #練習３
     yoko = True
     tate = True
@@ -70,6 +86,7 @@ def main():
             vy *= -1
 
         if kk_rct.colliderect(bb_rct):  #練習４
+            gameover(screen)
             return
 
         screen.blit(kk_img, kk_rct)
