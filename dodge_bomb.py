@@ -47,9 +47,9 @@ def gameover(screen: pg.Surface) -> None:
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:  #練習３
     yoko = True
     tate = True
-    if rct.left < 0 or rct.right > WIDTH:
+    if rct.left < 0 or WIDTH < rct.right:
         yoko = False
-    if rct.top < 0 or rct.bottom > HEIGHT:
+    if rct.top < 0 or HEIGHT < rct.bottom:
         tate = False
     return yoko, tate
 
