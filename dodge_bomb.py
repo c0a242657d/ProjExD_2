@@ -7,6 +7,14 @@ import pygame as pg
 WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def check_bound(rct: pg.Rect) -> tuple[bool, bool]:  #練習３
+    yoko = True
+    tate = True
+    if rct.left < 0 or rct.right > WIDTH:
+        yoko = False
+    if rct.top < 0 or rct.bottom > HEIGHT:
+        tate = False
+    return yoko, tate
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -29,7 +37,7 @@ def main():
     bb_img.set_colorkey((0, 0, 0))
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
 
-    bb_rct = bb_img.get_rect()
+    bb_rct = bb_img.get_rect()  #練習２
     bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     vx, vy = 5, 5
 
@@ -47,10 +55,22 @@ def main():
                 kk_y += delta[1]
         kk_rct.move_ip(kk_x, kk_y)
 
+        yoko, tate = check_bound(kk_rct) #練習３
+        if not yoko:
+            kk_rct.move_ip(-kk_x, 0)
+        if not tate:
+            kk_rct.move_ip(0, -kk_y)
+
         bb_rct.move_ip(vx, vy)
 
+        yoko, tate = check_bound(bb_rct)
+        if not yoko:
+            vx *= -1
+        if not tate:
+            vy *= -1
+
         screen.blit(kk_img, kk_rct)
-        screen.blit(bb_img, bb_rct)
+        screen.blit(bb_img, bb_rct) #練習２
         pg.display.update()
         tmr += 1
         clock.tick(50)
