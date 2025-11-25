@@ -1,6 +1,7 @@
 import os
 import sys
 import random
+import time
 import pygame as pg
 
 
@@ -8,20 +9,40 @@ WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def gameover(screen: pg.Surface) -> None:
-    font1 = pg.font.Font(None, 150)
-    font2 = pg.font.Font(None, 100)
-    text1 = font1.render("GAME OVER", True, (255, 0, 0))
-    text2 = font2.render("Press any key to continue", True, (0, 0, 255))
-    screen.blit(text1, [WIDTH//2 - text1.get_width()//2, HEIGHT//2 - text1.get_height()])
-    screen.blit(text2, [WIDTH//2 - text2.get_width()//2, HEIGHT//2 + 50])
+    """
+    ゲームオーバー画面を表示する関数
+    引数:
+        screen (pg.Surface): ゲーム画面のSurfaceオブジェクト
+    戻り値:
+        なし
+    """
+    # 1. 画面を暗くするためのSurfaceを作成
+    dark_surf = pg.Surface((WIDTH, HEIGHT))
+    dark_surf.fill((0, 0, 0)) 
+
+    # 2. 透明度を設定
+    dark_surf.set_alpha(200)
+
+    # 3. Game Over テキストを作成
+    font = pg.font.Font(None, 120)
+    text_surf = font.render("GAME OVER", True, (255, 255, 255)) 
+    text_rect = text_surf.get_rect(center=(WIDTH//2, HEIGHT//2))
+    dark_surf.blit(text_surf, text_rect)
+
+    # 4. こうかとんの画像を左右に配置
+    kk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 1.0)
+    kk_l = kk_img.get_rect(center=(WIDTH//2 + 300, HEIGHT//2))
+    kk_r = kk_img.get_rect(center=(WIDTH//2 - 300, HEIGHT//2))
+    dark_surf.blit(kk_img, kk_l)
+    dark_surf.blit(kk_img, kk_r)
+
+    # 5. 画面に重ねる
+    screen.blit(dark_surf, (0, 0))
+
+    # 6. 更新して 5 秒停止
     pg.display.update()
-    while True:
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-            if event.type == pg.KEYDOWN:
-                return
+    time.sleep(5)
+    return
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:  #練習３
     yoko = True
