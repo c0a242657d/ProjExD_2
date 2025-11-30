@@ -9,7 +9,13 @@ WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def gameover(screen: pg.Surface) -> None:
-
+    """
+    ゲームオーバー画面を表示する関数
+    引数:
+        screen (pg.Surface): ゲーム画面のSurfaceオブジェクト
+    戻り値:
+        なし
+    """
     # 1. 画面を暗くするためのSurfaceを作成
     dark_surf = pg.Surface((WIDTH, HEIGHT))
     dark_surf.fill((0, 0, 0)) 
